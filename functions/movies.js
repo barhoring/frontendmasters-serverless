@@ -18,7 +18,6 @@ exports.handler = async () => {
 
   // add the secret API key to the query string
   api.searchParams.set("apiKey", process.env.OMDB_API_KEY);
-  console.log("api:", process.env.OMDB_API_KEY);
 
   const promises = movies.map((movie) => {
     // use the movie’s IMDb ID to look up details
