@@ -76,6 +76,7 @@
 
 <script>
   function addScores(element, scores) {
+    debugger;
     scores.forEach((score) => {
       const item = document.createElement("li");
       const label = document.createElement("span");
@@ -99,6 +100,7 @@
     const movies = await fetch("/.netlify/functions/movies").then((response) =>
       response.json()
     );
+    debugger;
     const container = document.querySelector(".movies");
     const template = document.querySelector("#movie-template");
 
