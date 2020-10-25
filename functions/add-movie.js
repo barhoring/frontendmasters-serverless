@@ -1,7 +1,19 @@
 const { query } = require("./util/hasura");
 
-async function addMovie(event) {
+async function addMovie(event, context) {
   const { id, title, tagline, poster } = JSON.parse(event.body);
+
+  const { user } = context.clientContext;
+
+  const isLoggedIn = user && user.app_metadata;
+  const roles = user.app_metadata.roles || [];
+
+  if (!isLoggedIn || !roles.includes("admin")) {
+    return {
+      statusCode: "401",
+      body: "Unauthorized",
+    };
+  }
 
   const result = await query({
     query: `mutation ($id: String = "", $poster: String = "", $tagline: String = "", $title: String = "") {
@@ -16,12 +28,6 @@ async function addMovie(event) {
       }`,
     variables: { id, title, tagline, poster },
   });
-
-  //   console.log("result:", result);
-
-  //   const { _id, _title, _tagline, _poster } = insert_movies.returning;
-
-  //   console.log(Object.keys(result["insert_movies"]["returning"]));
 
   return {
     statusCode: 200,
